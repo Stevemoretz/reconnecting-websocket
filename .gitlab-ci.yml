@@ -1,0 +1,2 @@
+include:
+  remote: 'https://gitlab.com/steve-moretz/gitlab-templates/-/raw/main/npm/.gitlab-ci.yml'

@@ -60,8 +60,8 @@ export type ListenersMap = {
 };
 
 export default class ReconnectingWebSocket {
-    private _ws?: WebSocket;
-    protected _listeners: ListenersMap = {
+    protected _ws?: WebSocket;
+    private _listeners: ListenersMap = {
         error: [],
         message: [],
         open: [],
@@ -74,7 +74,7 @@ export default class ReconnectingWebSocket {
     private _connectLock = false;
     private _binaryType: BinaryType = 'blob';
     private _closeCalled = false;
-    private _messageQueue: Message[] = [];
+    protected _messageQueue: Message[] = [];
 
     private readonly _url: UrlProvider;
     private readonly _protocols?: string | string[];
@@ -427,7 +427,7 @@ export default class ReconnectingWebSocket {
         }
     }
 
-    protected _handleOpen(event?: Event) {
+    protected _handleOpen = (event?: Event) => {
         this._debug('open event');
         const {minUptime = DEFAULT.minUptime} = this._options;
 
@@ -446,18 +446,18 @@ export default class ReconnectingWebSocket {
             }
             this._listeners.open.forEach(listener => this._callEventListener(event, listener));
         }
-    }
+    };
 
-    protected _handleMessage(event: MessageEvent) {
+    protected _handleMessage = (event: MessageEvent) => {
         this._debug('message event');
 
         if (this.onmessage) {
             this.onmessage(event);
         }
         this._listeners.message.forEach(listener => this._callEventListener(event, listener));
-    }
+    };
 
-    protected _handleError(event: Events.ErrorEvent) {
+    protected _handleError = (event: Events.ErrorEvent) => {
         this._debug('error event', event.message);
         this._disconnect(undefined, event.message === 'TIMEOUT' ? 'timeout' : undefined);
 
@@ -468,9 +468,9 @@ export default class ReconnectingWebSocket {
         this._listeners.error.forEach(listener => this._callEventListener(event, listener));
 
         this._connect();
-    }
+    };
 
-    protected _handleClose(event?: Events.CloseEvent) {
+    protected _handleClose = (event?: Events.CloseEvent) => {
         this._debug('close event');
         this._clearTimeouts();
 
@@ -484,7 +484,7 @@ export default class ReconnectingWebSocket {
             }
             this._listeners.close.forEach(listener => this._callEventListener(event, listener));
         }
-    }
+    };
 
     private _removeListeners() {
         if (!this._ws) {

@@ -1,5 +1,5 @@
 {
-    "name": "@stevemoretz/reconnecting-websocket",
+    "name": "@steve-moretz/reconnecting-websocket",
     "version": "4.4.0",
     "description": "Reconnecting WebSocket",
     "main": "./dist/reconnecting-websocket-cjs.js",
@@ -8,11 +8,13 @@
     "scripts": {
         "build": "npm run clean && rollup -c && uglifyjs --compress --mangle -o dist/reconnecting-websocket-iife.min.js dist/reconnecting-websocket-iife.js",
         "test": "jest --coverage",
+        "test:ci": "jest --config jest.config.json --collectCoverage --coverageDirectory=\"./coverage\" --ci --reporters=default --reporters=jest-junit --watchAll=false",
         "clean": "del dist && del coverage && del .nyc_output",
         "report": "nyc report --reporter=html && opn coverage/index.html",
         "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
         "lint": "DEBUG=eslint:file-enumerator eslint __tests__/*.* ./*.ts",
-        "prepublishOnly": "npm run clean && npm run lint && npm run build && npm test"
+        "format": "eslint \"**/*.{ts,js}\" --fix",
+        "prepare": "yarn build"
     },
     "keywords": [
         "websocket",
@@ -64,7 +66,7 @@
         "url": "https://github.com/pladaria/reconnecting-websocket/issues"
     },
     "publishConfig": {
-        "registry": "https://registry.npmjs.org"
+        "@steve-moretz:registry": "https://gitlab.com/api/v4/projects/34864137/packages/npm/"
     },
     "homepage": "https://github.com/pladaria/reconnecting-websocket#readme",
     "lint-staged": {
